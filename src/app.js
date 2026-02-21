@@ -1,18 +1,30 @@
 const express=require("express");
+const connectDB=require("./config/database");
 const app=express();
+const User=require("./models/user");
 
-app.use("/user",(req,res)=>{
-    res.send("HAHAHAHA");
+app.post("/signup",async(req,res)=>{
+    const user=new User({
+        firstName:"Akshay",
+        lastName:"Saini",
+        emailId:"akshay@gmail.com",
+        password:"akshay123",
+    });
+    try{
+        await user.save();
+        res.send("User saved successfully");
+    } catch(err){
+        res.status(400).send("Error saving the user:"+err.message);
+    }
 });
-app.get("/user",(req,res)=>{
-    res.send("GET METHOD");
+connectDB()
+.then(()=>{
+    console.log("Database connection established");
+    app.listen(7777,()=>{
+        console.log("server is successfully listening on port 7777");
+    });
+})
+.catch((err)=>{
+    console.error("Database cannot be connected");
 });
-app.post("/user",(req,res)=>{
-    res.send("POST METHOD");
-});
-app.delete("/user",(req,res)=>{
-    res.send("DELETE METHOD");
-});
-app.listen(7777,()=>{
-    console.log("server is successfully listening on port 7777");
-});
+
