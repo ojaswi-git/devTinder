@@ -3,6 +3,8 @@ const connectDB=require("./config/database");
 const app=express();
 const User=require("./models/user");
 
+require('dotenv').config();
+
 app.post("/signup",async(req,res)=>{
     const user=new User({
         firstName:"Akshay",
