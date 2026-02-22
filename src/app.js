@@ -47,6 +47,14 @@ app.delete("/user",async(req,res)=>{
 app.patch("/user",async(req,res)=>{
     const userId=req.body.userId;
     const data=req.body;
+
+    const ALLOWED_UPDATES=["photoUrl","userId","about","skills","gender","age"];
+    const isUpateAllowed=Object.keys(data).every((field)=>
+        ALLOWED_UPDATES.includes(field)
+    );
+    if(!isUpateAllowed){
+        return res.status(400).send("Invalid updates");
+    }
     try{
         await User.findByIdAndUpdate(userId,data);
         res.send("User updated successfully");
